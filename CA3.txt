@@ -1,0 +1,266 @@
+                            ابتدا ليست هاي پيوندي مورد نياز را بوسيله ي دو استراكت تعريف مي كنيم
+                          
+                            ها post ليست * 
+struct POSTS
+{
+    char* username;
+    int postId;
+    int likes;
+    char* content;
+
+    struct posts* nextPost
+};
+
+                            ها user ليست *
+struct USERS
+{
+    char* username;
+    char* password;
+    POSTS* postsHead;
+
+    struct users* nextUser
+};
+*******************************************************************************************
+                            حالا براي هر كدام از اعمالي كه قرار است انجام شوند يك تابع معرفي ميكنيم
+                           
+                            ثبت نام كاربر *
+FUNCTION signup(commmandInfo, USERShead)
+    initialize nodePointer = USERShead
+
+    IF (commmandInfo[1] = signup, login, logout, like and other command names)
+        print (you cant use this name!)
+        END FUNCTION signup
+
+    WHILE nodePointer doesn't points to NULL(tail of USERS list) 
+        IF (username value of the struct that nodePointer points to = commmandInfo[1] )
+            print (Duplicate name!)
+            END FUNCTION signup
+        nodePointer = nextUser value of the struct that nodePointer points to
+    IF (username value of the struct that nodePointer points to = commmandInfo[1] )        در حلقه اخرين عضو بررسي نميشود،پس بيرون حلقه بطور دستي آنرا چك ميكنيم
+        print (Duplicate name!)
+        END FUNCTION signup    
+
+                                                                                            اگر ورودي ها مشكل نداشتند،اطلاعات را وارد يك استراكت كرده و انرا وارد ليست ميكنيم
+                                                                                            نكته : نام كاربري و پسوورد بصورت آرايه پويا تعريف شده و جابه جا ميشوند كه محدوديت حافظه نداشته باشيم
+    initialize newUser USERS struct 
+    newUser username = commmandInfo[1](read commmandInfo[1] char by char resize username Whenever necessary )
+    newUser password = commmandInfo[2](read commmandInfo[2] char by char resize password Whenever necessary )
+
+    initialize postsHead pointer that points to a POSTS struct
+    newUser postsHead = postsHead
+
+    nextUser value of the struct that nodePointer points to = newUser
+    newUser nextUser = NULL
+
+    print(you signed up successfully!)
+
+END FUNCTION signup
+
+                            ورود به حساب كاربري * 
+FUNCTION login(commmandInfo, USERShead)
+    initialize nodePointer = USERShead
+
+    WHILE nodePointer doesn't points to NULL(tail of USERS list) 
+        IF (username value of the struct that nodePointer points to = commmandInfo[1]
+                AND  password value of the struct that nodePointer points to = commmandInfo[2])
+            print(you logged in successfully!)
+            END FUNCTION login SUCCESSFULLY
+
+        nodePointer = nextUser value of the struct that nodePointer points to
+
+    IF (username value of the struct that nodePointer points to = commmandInfo[1]               در حلقه اخرين عضو بررسي نميشود،پس بيرون حلقه بطور دستي آنرا چك ميكنيم  
+            AND  password value of the struct that nodePointer points to = commmandInfo[2])
+        print(you logged in successfully!)
+        END FUNCTION login SUCCESSFULLY
+                                                                                        
+END FUNCTION login 
+
+                            پست گذاشتن *  
+FUNCTION post(commmandInfo, postsHead, user)
+    initialize nodePointer = POSTShead
+    WHILE nodePointer doesn't points to NULL(tail of POSTS list) 
+        nodePointer = nextUser value of the struct that nodePointer points to
+
+                                                                        اضافه كردن پست به ليست پست هاي فرد
+    initialize newPOST POSTS struct 
+    newPOST username = user username(read user username char by char resize username Whenever necessary )
+    newPOST postId = nodePointer struct postId + 1
+    newPOST likes = 0
+    newPOST content = commmandInfo[1](read commmandInfo[1] char by char resize content Whenever necessary )
+
+    nextPost value of the struct that nodePointer points to = newPOST
+    newPOST nextPost = NULL
+
+    print(content posted successfully!)
+
+END FUNCTION post 
+
+                            لايك كردن *
+FUNCTION like(commmandInfo, postsHead)
+    initialize nodePointer = POSTShead
+
+    IF ( int(commmandInfo[2]) is not in post_id values pf postslist that postsHead points to)
+        PRINT (incorrect post id!)
+        END FUNCTION like
+                                                                            اگر دستور درست بود،عمل لايك كردن انجام ميشود
+    WHILE nodePointer doesn't points to NULL(tail of USERS list)
+        IF (commmandInfo[1] = nodePointer username AND commmandInfo[1] = nodePointer post_id)  
+            IF nodePointer struct likes = 1
+                print(you cant like more!)
+                END FUNCTION like
+
+            nodePointer struct likes = nodePointer struct likes + 1
+        nodePointer = nextUser value of the struct that nodePointer points to
+    
+    print(you liked successfully!)
+    
+END FUNCTION like
+
+                            خروج از حساب كاربري *
+FUNCTION logout(userInfo, USERShead)
+    initialize nodePointer = USERShead
+    WHILE nodePointer doesn't points to NULL(tail of USERS list)
+        IF (nodePointer nextUser username = userInfo username)
+                                                                            عمليات حذف اكانت از ليست اكانت ها را انجام ميدهيم
+            nodePointer nextUser username = nodePointer nextUser nextUser username
+            free memmory of user struct
+        nodePointer = nextUser value of the struct that nodePointer points to
+
+END FUNCTION logout SUCCESSFULLY
+    
+
+                            حذف كردن پست *
+FUNCTION delete(commmandInfo, postsHead)
+
+    IF (commmandInfo[1] is not in post_id value of list of posts that postsHead points to)
+        print(this post id is not availble)
+    initialize nodePointer = POSTSShead
+    WHILE nodePointer doesn't points to NULL(tail of POSTS list)
+        IF (nodePointer nextPost post_id = post post_id)
+                                                                            عمليات حذف اكانت از ليست اكانت ها را انجام ميدهيم
+            nodePointer nextPost post_id = nodePointer nextPost nextPost post_id
+            free memmory of post struct
+        nodePointer = nextUser value of the struct that nodePointer points to
+END FUNCTION delete
+
+                            مشاهده اطلاعات *
+FUNCTION info(USERShead, userInfo)
+    print(
+        userInfo username
+        userInfo password
+    )
+    initialize postsnodePointer = POSTShead
+    WHILE postsnodePointer doesn't points to NULL(tail of POSTS list)
+        print(
+            postsnodePointer post_id
+            postsnodePointer likes
+            postsnodePointer content
+        )
+
+        postsnodePointer = nextUser value of the struct that nodePointer points to
+
+END FUNCTION info
+
+                            جستجو كاربر *
+FUNCTION find_user(commmandInfo, USERShead)
+    initialize nodePointer = USERShead
+    WHILE nodePointer doesn't points to NULL(tail of USERS list)
+        IF(nodePointer username = commmandInfo[1])
+            initialize postsnodePointer = nodePointer postsHead
+            WHILE postsnodePointer doesn't points to NULL(tail of POSTS list)
+                print(
+                    postsnodePointer post_id
+                    postsnodePointer likes
+                    postsnodePointer content
+                )
+                postsnodePointer = nextUser value of the struct that nodePointer points to                 
+        nodePointer = nextUser value of the struct that nodePointer points to
+        END FUNCTION find_user
+    print(we cant find this user!)
+END FUNCTION find_user
+
+*******************************************************************************************
+                            سودوكد را شروع ميكنيم و البته داخل آن از ساختمان ليست و استراكت ها و توابع استفاده ميكنيم
+PROGRAM UT_TUTY
+
+    initialize USERShead pointer that points to head of USERS linkedlist
+
+    WHILE (TRUE)
+        loggedIn = FALSE
+        print (Enter a command : )
+        initialize Order as a dynamic array 
+        input Order char by char and resize Order Whenever necessary      دريافت دستور و ريختن آن در آرايه پويا  
+
+        initialize commmandInfo as a array                                تقسيم كردن رشته ي وارد شده به چند تكه كه با اسپيس از هم جدا شده بودند
+        split Order by space character and put parts in commmandInfo      و ريختن تمام بخش ها در يك آرايه براي بررسي آسان تر
+
+
+        IF (loggedIn = TRUE)                                              تشخيص دستور داده شده و عمل به آن با توجه به داخل اكانت يا خارج از اكانت بودن كاربر
+            
+            initialize userInfo = user USERS struct values
+            initialize postsHead = pointer to user POSTS linkedlist
+
+            IF (commmandInfo[0] = signup )
+                PRINT (for use this command you should logout first!)
+            IF (commmandInfo[0] = login )
+                PRINT (for use this command you should logout first!)
+            
+
+            IF (commmandInfo[0] = post )
+                RUN FUNCTION post(commmandInfo, postsHead, userInfo)
+
+            IF (commmandInfo[0] = like )
+                RUN FUNCTION like(commmandInfo, postsHead)
+
+            IF (commmandInfo[0] = delete )
+                RUN FUNCTION delete(commmandInfo, postsHead)
+
+            IF (commmandInfo[0] = info )
+                RUN FUNCTION info(USERShead, userInfo)
+
+            IF (commmandInfo[0] = find_user )
+                RUN FUNCTION find_user(commmandInfo, USERShead)
+            
+
+            IF (commmandInfo[0] = logout )
+                RUN FUNCTION logout(userInfo, USERShead)
+                IF logout function runs successfully
+                    loggedIn = FALSE
+            
+
+            ELSE
+                PRINT (incorrect command! try again )
+                
+        ELSE IF (loggedIn = FALSE)
+            IF (commmandInfo[0] = signup )
+                RUN FUNCTION signup(commmandInfo, USERShead)
+
+            IF (commmandInfo[0] = login )
+                RUN FUNCTION login(commmandInfo)
+                IF login function runs successfully
+                    loggedIn = TRUE
+
+
+            IF (commmandInfo[0] = find_user )
+                RUN FUNCTION find_user(USERShead)
+
+
+            IF (commmandInfo[0] = post )
+                PRINT (for use this command you should login first!)
+
+            IF (commmandInfo[0] = like )
+                PRINT (for use this command you should login first!)
+
+            IF (commmandInfo[0] = logout )
+                PRINT (for use this command you should login first!)
+
+            IF (commmandInfo[0] = delete )
+                PRINT (for use this command you should login first!)
+
+            IF (commmandInfo[0] = info )
+                PRINT (for use this command you should login first!)
+
+
+            ELSE
+                PRINT (incorrect command! try again )
+ENDPROGRAM
